@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    
+    <form class="form-group mx-auto w-50 shadow px-4 py-2" action="/addtodo" method="post">
+        <h1 class="text-muted text-center">Todo</h1>
+        <input name="title" class="form-control mt-3" placeholder="Title" type="text">
+        <input name="content" class="form-control mt-3" placeholder="Content" type="text">
+        <button type="submit" class="btn btn-primary mt-3">Addtodo</button>
+    </form>
+
+
+    <div class="shadow w-50 mx-auto ">
+        <% if (todoarray && todoarray.length > 0) { %>
+           <% todoarray.forEach((todo, index )=> { %>
+               <div class="d-flex justify-content-between align-items-center">
+                <h1><%= index %></h1>
+                   <h1><%= todo.title %></h1>
+                   <h1><%= todo.content %></h1>
+                   <form action="/delete/<%= index  %>" method="post">
+                    <!-- <input hidden name="index" value="<%= index %>" type="text"> -->
+                     <button type="submit" class="btn btn-danger">Delete</button>
+                   </form>
+                   <form action="/edit/<%= index  %>" method="post">
+                     <button type="submit" class="btn btn-danger">Edit</button>
+                   </form>
+               </div>
+           <% }) %>
+        <% } %>
+    </div>
+</body>
+</html>
