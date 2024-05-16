@@ -1,10 +1,21 @@
 const express = require("express")
 const app = express()
 const ejs = require("ejs")
+const mongoose = require("mongoose")
 app.set("view engine", "ejs")
 app.use(express.urlencoded({extended:true}))
  let userarray =[]
  let todoarray = []
+
+ let userschema = new mongoose.Schema({
+   firstname:{type:String},
+   lastname:{type:String},
+   email:{type:String},
+   password:{type:String},
+ })
+
+let usermodel = mongoose.model("user_collection", userschema)
+
 app.get("/",(req, res)=>{
     // res.send([
     //     { name:"nelson", class:"Node"},
@@ -37,12 +48,24 @@ app.get('/signin',(req, res)=>{
     res.render('login')
  })
 
-app.post('/register',(req, res)=>{
-    console.log(req.body);
-    userarray.push(req.body)
-    console.log(userarray);
-    res.redirect("/signin")
+app.post('/register', async(req, res)=>{
+   try {
+      console.log(req.body);
+      let users =  await usermodel.create(req.body)
+      if (users) {
+        console.log("signedup successful");
+          res.redirect("/signin")
+      }else{
+       console.log("error occured while signing up");
+      }
+   } catch (error) {
+      console.log(error);
+   }
+  
+  
 })
+
+
 app.post("/login",(req, res)=>{
    console.log(req.body);
    const {email, password} = req.body
@@ -72,9 +95,41 @@ app.post("/delete/:index",(req, res)=>{
     res.redirect("/todo")
 
 })
+app.get("/edit/:index",(req, res)=>{
+  console.log( req.params.index);
+  let index = req.params.index
+  res.render('edit',{index, todoarray})
+})
+
+app.post("/update/:index",(req, res)=>{
+   console.log(req.params.index , "params");
+   let index = req.params.index
+   todoarray[index] = req.body
+   console.log(todoarray);
+   res.redirect('/todo')
+})
+
+
+
+const uri = "mongodb+srv://aishatadekunle877:aishat@cluster0.t92x8pf.mongodb.net/mayclass?retryWrites=true&w=majority&appName=Cluster0"
+
+const connect = ()=>{
+   try {
+      const connection = mongoose.connect(uri)
+      if (connection) {
+         console.log("connected to database");
+      }else{
+       console.log("error occured");
+      }
+   } catch (error) {
+      console.log(error);
+   }
+ 
+}
+
+connect()
 
 let port = 5005
-
-app.listen(port,()=>{
+app.listen(port,()=>{ 
    console.log(`app started on port ${port}`);
 })
