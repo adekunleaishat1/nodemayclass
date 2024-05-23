@@ -7,6 +7,11 @@
 </head>
 <body>
     <h1>welcome to your node class <%= name %> </h1>
+    <input placeholder="item" type="text">
+   
+    <input placeholder="price" type="text">
+    <input placeholder="quantity" type="text">
+    <input placeholder="subtotal" type="text">
 
     <p><%= 2 * 2 %></p>
     <p><%= Math.random() %></p>
@@ -14,6 +19,15 @@
     <% if (1== 2) { %>
        <p>this is correct</p>
     <% } %>
-    
+    <% alluser.forEach(element => { %>
+        <div class="d-flex justify-content-center align-items-center ">
+            <h1><%= element.firstname %></h1>
+            <h1><%= element.lastname %></h1>
+            <h1><%= element.email %></h1>
+            <form action="/delete/<%= element._id %>" method="post">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    <% }) %>
 </body>
 </html>
